@@ -1,8 +1,8 @@
-import json
 from fastapi import FastAPI, Depends
 import auth
 import logic
 import schemas
+from app_routers import item_router,khmer_quote_router
 from main import session
 
 
@@ -72,3 +72,29 @@ async def user_login(email: str, password: str,db: logic.Session= Depends(get_db
             result['code'] = '100'
             result['message'] = 'incorrect password.'
             return result
+
+
+@app.put('/update_user')
+async def update_user(id: int,user: schemas.CreateUserModel, db = Depends(get_db)):
+    result = dict(code='000',message='update user successfully',data='')
+    is_success = logic.update_user(id,user  ,db)
+    if is_success[0]:
+        return result
+    else:
+        result['code'] = '100'
+        result['message'] = is_success[1]
+        return result
+
+
+@app.delete('/delete_user')
+async def delete_user(id: int, db = Depends(get_db)):
+    result = dict(code='000',message='deleted user successfully',data='')
+    is_success = logic.delete_user(id,db)
+    if is_success:
+        return result
+    result['message'] = 'Fail to delete cause user not founded'
+    result['code'] = '100'
+    return result
+
+app.include_router(item_router.router)
+app.include_router(khmer_quote_router.router)

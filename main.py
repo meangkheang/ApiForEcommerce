@@ -30,6 +30,13 @@ class Item(Base):
 
     def __repr__(self):
         return f'{self.id}. {self.name} owner_is : {self.owner}'
+
+
+class KhmerQuote(Base):
+    __tablename__ = 'khmer_quotes'
+    id = Column("id",Integer,primary_key=True)
+    content = Column("content",String)
+
 # p = Person(username="rith",email="rith@gmail.com",password="rithtest")
 # session.add(p)
 # session.commit()
@@ -44,8 +51,8 @@ class Item(Base):
 # results = session.query(Person,Item).filter(Person.id == 1,Item.person_id == 1).all()
 # print(results)
 
-
 # Base.metadata.create_all(bind=engine)
+
 
 if __name__ == '__main__':
     uvicorn.run("main:router.app",reload=True)
